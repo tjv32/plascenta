@@ -1,0 +1,26 @@
+SampleNum,SampleSID,SampleLoc,SampleGroup,Sex,Condition
+1,s1DB,Basal Plate,s1,M,TIL
+2,s1W,Membranes,s1,M,TIL
+3,s2DB,Basal Plate,s2,M,TNL
+4,s2P,Placenta,s2,M,TNL
+5,s2W,Membranes,s2,M,TNL
+6,s3DB,Basal Plate,s3,F,TNL
+7,s3P,Placenta,s3,F,TNL
+8,s3W,Membranes,s3,F,TNL
+9,s4DB,Basal Plate,s4,M,TNL
+10,s4P,Placenta,s4,M,TNL
+11,s4W,Membranes,s4,M,TNL
+12,s5DB,Basal Plate,s5,F,TIL
+13,s5P,Placenta,s5,F,TIL
+14,s5W,Membranes,s5,F,TIL
+15,s6DB,Basal Plate,s6,F,PTL
+16,s6P,Placenta,s6,F,PTL
+17,s6W,Membranes,s6,F,PTL
+18,s7DB,Basal Plate,s7,F,PTL
+19,s7P,Placenta,s7,F,PTL
+20,s7W,Membranes,s7,F,PTL
+21,s8DB,Basal Plate,s8,F,PTL
+22,s8P,Placenta,s8,F,PTL
+23,s8W,Membranes,s8,F,PTL
+24,s9DB,Basal Plate,s9,F,TIL
+25,s9W,Membranes,s9,F,TIL
