@@ -23,7 +23,7 @@ cmap_dict = {
 fm_colors = ['blue', 'red']
 
 sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
-if('sample_num' not in sc_df):
+if('sample_num' not in sc_df.columns):
 	sc_df['sample_num'] = [1] * len(sc_df)
 
 groups = list(sc_df['annotated_clusters'].unique())
