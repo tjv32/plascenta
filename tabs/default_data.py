@@ -27,7 +27,14 @@ if('sample_num' not in sc_df.columns):
 	sc_df['sample_num'] = [1] * len(sc_df)
 
 groups = list(sc_df['annotated_clusters'].unique())
-
+if(len(groups) > 10):
+	groups = [
+		'T-Cell-Resting', 'T-Cell-Activated', 'NK-cell', 'B-cell',
+		'STB', 'EVT', 'CTB', 'Endometrial'
+		'Macrophage-1', 'Macrophage-2', 'Monocyte',
+		'Decidual', 'Stromal-1', 'Stromal-3', 'Fibroblast',
+		'LED', 'HSC'
+	]
 N = len(groups)
 RGB_tuples = get_N_HexCol(N=N)
 cmap_dict = {}
