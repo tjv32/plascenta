@@ -3,11 +3,13 @@ import numpy as np
 import colorsys
 
 def get_N_HexCol(N=5):
-    HSV_tuples = [(x * 1.0 / N, (x * 1.0 / N)/2 + 0.5 , 0.65) for x in range(N)]
+    HSV_tuples = [(x * 1.0 / N, 0.75, 0.75) for x in range(N)]
     hex_out = []
     for rgb in HSV_tuples:
         rgb = map(lambda x: int(x * 255), colorsys.hsv_to_rgb(*rgb))
         hex_out.append('#%02x%02x%02x' % tuple(rgb))
+    hex_out = np.array(hex_out)
+    np.random.shuffle(hex_out)
     return hex_out
 
 cmap_dict = {
@@ -21,8 +23,8 @@ cmap_dict = {
 	 'Megakaryocytes': 'pink'
 }
 fm_colors = ['blue', 'red']
-
-sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
+sc_df = pd.read_csv('/home/tjv32/research/Python Notebooks/data/dash_data/sc_df.csv')
+#sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
 if('sample_num' not in sc_df.columns):
 	sc_df['sample_num'] = [1] * len(sc_df)
 
@@ -30,7 +32,7 @@ groups = list(sc_df['annotated_clusters'].unique())
 if(len(groups) > 10):
 	groups = [
 		'T-Cell-Resting', 'T-Cell-Activated', 'NK-cell', 'B-cell',
-		'STB', 'EVT', 'CTB', 'Endometrial'
+		'STB', 'EVT', 'CTB', 'Endometrial',
 		'Macrophage-1', 'Macrophage-2', 'Monocyte',
 		'Decidual', 'Stromal-1', 'Stromal-3', 'Fibroblast',
 		'LED', 'HSC'
