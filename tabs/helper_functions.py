@@ -35,7 +35,13 @@ def determine_filter_samples(group_info, sex, location, clinical):
         r_df = r_df[r_df.Condition.isin(clinical)]
     return list(r_df.SampleNum)
 
-
+def get_N_HexCol(N=5):
+    HSV_tuples = [(x * 1.0 / N, 0.5, 0.5) for x in range(N)]
+    hex_out = []
+    for rgb in HSV_tuples:
+        rgb = map(lambda x: int(x * 255), colorsys.hsv_to_rgb(*rgb))
+        hex_out.append('#%02x%02x%02x' % tuple(rgb))
+    return hex_out
 
 def determine_fetal_counts(fetal_df, maternal_df):
     if(len(fetal_df) == 0 and len(maternal_df) == 0):

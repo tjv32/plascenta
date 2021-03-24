@@ -1,5 +1,14 @@
 import pandas as pd
 import numpy as np
+import colorsys
+
+def get_N_HexCol(N=5):
+    HSV_tuples = [(x * 1.0 / N, (x * 1.0 / N)/2 + 0.5 , 0.65) for x in range(N)]
+    hex_out = []
+    for rgb in HSV_tuples:
+        rgb = map(lambda x: int(x * 255), colorsys.hsv_to_rgb(*rgb))
+        hex_out.append('#%02x%02x%02x' % tuple(rgb))
+    return hex_out
 
 cmap_dict = {
 	'NK': 'teal',
@@ -16,6 +25,15 @@ fm_colors = ['blue', 'red']
 sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
 if('sample_num' not in sc_df):
 	sc_df['sample_num'] = [1] * len(sc_df)
+
+groups = list(sc_df['annotated_clusters'].unique())
+
+N = len(groups)
+RGB_tuples = get_N_HexCol(N=N)
+cmap_dict = {}
+for i in range(N):
+	cmap_dict[groups[i]] = str(RGB_tuples[i])
+
 group_info = pd.read_csv('data/group_info.csv')
 sex_vals = ['M', 'F']
 clinical_states = ['TIL', 'TNL', 'PTL']
