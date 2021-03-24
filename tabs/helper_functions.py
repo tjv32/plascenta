@@ -157,6 +157,7 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                             name=group,
                             legendgroup = group,
                             showlegend = False,
+                            visible=view_filter['selection_data'][(group_count + 1) * 2 + group_count * 8 + 1] 
                         ),
                         row = 3,
                         col = 1
