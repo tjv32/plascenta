@@ -27,18 +27,12 @@ def generate_filter_view():
 
 def determine_filter_samples(group_info, sex, location, clinical):
     r_df = group_info.copy()
-    print(r_df)
-    print(0, len(r_df))
     if(sex is not None):
         r_df = r_df[r_df.Sex.isin(sex)]
-    print(1, len(r_df))
-    print(location)
     if(location is not None):
         r_df = r_df[r_df.SampleLoc.isin(location)]
-    print(2, len(r_df))
     if(clinical is not None):
         r_df = r_df[r_df.Condition.isin(clinical)]
-    print(3, len(r_df))
     return list(r_df.SampleNum)
 
 

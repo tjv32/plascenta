@@ -256,7 +256,6 @@ def update_views(n_clicks, view_1, view_2, view_3, dd_count):
     current_views = []
     for i, adj_view in enumerate(adj_views[:dd_count]):
         samples = determine_filter_samples(group_info, adj_view[0]['props']['value'], adj_view[2]['props']['value'], adj_view[1]['props']['value'])
-        print('hey', samples)
         current_views.append(generate_meta_view(i, dd_count, samples)) 
     while(len(current_views) < 3):
         current_views.append(None)
