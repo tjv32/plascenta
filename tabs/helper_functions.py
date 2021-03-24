@@ -27,13 +27,18 @@ def generate_filter_view():
 
 def determine_filter_samples(group_info, sex, location, clinical):
     r_df = group_info.copy()
+    print(r_df)
+    print(0, len(r_df))
     if(sex is not None):
         r_df = r_df[r_df.Sex.isin(sex)]
+    print(1, len(r_df))
+    print(location)
     if(location is not None):
         r_df = r_df[r_df.SampleLoc.isin(location)]
+    print(2, len(r_df))
     if(clinical is not None):
         r_df = r_df[r_df.Condition.isin(clinical)]
-
+    print(3, len(r_df))
     return list(r_df.SampleNum)
 
 
@@ -65,9 +70,9 @@ def generate_view_plot(sc_df, view_filter, view_meta):
             'Cell Type breakdown'
         ]
     )
-
+    s_sc_df = sc_df[sc_df.sample_num.isin(view_meta['sample_selection'])]
     for group_count, group in enumerate(cmap_dict.keys()):
-        g_df = sc_df[sc_df.annotated_clusters == group].copy()
+        g_df = s_sc_df[s_sc_df.annotated_clusters == group].copy()
 
         selection_bool = view_filter['selection_data'][group_count * 2]
 
@@ -150,9 +155,9 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                             y = fm_r_df.umap_2.to_list(),
                             mode='markers',
                             marker = dict(
-                            color = fm_color,
-                            size = 4,
-                            opacity=opacity,
+                                color = fm_color,
+                                size = 4,
+                                opacity=opacity,
                             ),
                             name=group,
                             legendgroup = group,

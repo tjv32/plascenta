@@ -14,6 +14,8 @@ cmap_dict = {
 fm_colors = ['blue', 'red']
 
 sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
+if('sample_num' not in sc_df):
+	sc_df['sample_num'] = [1] * len(sc_df)
 group_info = pd.read_csv('data/group_info.csv')
 sex_vals = ['M', 'F']
 clinical_states = ['TIL', 'TNL', 'PTL']
