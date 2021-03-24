@@ -33,7 +33,6 @@ def determine_filter_samples(group_info, sex, location, clinical):
         r_df = r_df[r_df.SampleLoc.isin(location)]
     if(clinical is not None):
         r_df = r_df[r_df.Condition.isin(clinical)]
-    print(list(r_df.SampleNum))
     return list(r_df.SampleNum)
 
 
@@ -64,7 +63,10 @@ def generate_view_plot(sc_df, view_filter, view_meta):
             'Cell Type breakdown'
         ]
     )
+    print('view_meta', view_meta['sample_selection'])
     s_sc_df = sc_df[sc_df.sample_num.isin(view_meta['sample_selection'])]
+    print(set(sc_df.sample_num))
+    print('length', len(s_sc_df))
     for group_count, group in enumerate(cmap_dict.keys()):
         g_df = s_sc_df[s_sc_df.annotated_clusters == group].copy()
 

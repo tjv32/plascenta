@@ -30,7 +30,7 @@ number_of_groups_labels = html.Label(
 number_of_groups_dd = dcc.Dropdown(
     id='number_of_groups_dd',
     options=[{'label': i, 'value': i} for i in range(1, 4)],
-    value=3,
+    value=1,
     multi=False,
 )
 
