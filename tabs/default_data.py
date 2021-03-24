@@ -57,9 +57,6 @@ sex_filters = [{'label': i, 'value': i} for i in sex_vals]
 clinical_state_filters = [{'label': i, 'value': i} for i in clinical_states]
 placenta_location_filters = [{'label': i, 'value': i} for i in plascenta_locations]
 
-r_arr = np.array([1]*len(sc_df) + [2]*len(sc_df) +[3]*len(sc_df))
-np.random.shuffle(r_arr)
-sc_df['sample_num'] = r_arr[:len(sc_df)]
 
 custom_dict = {
 	'all' : [i for i in list(set(sc_df['sample_num']))],
