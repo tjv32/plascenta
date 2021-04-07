@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import colorsys
+import scanpy as sc
 
 def get_N_HexCol(N=5):
     HSV_tuples = [(x * 1.0 / N, 0.75, 0.75) for x in range(N)]
@@ -23,8 +24,11 @@ cmap_dict = {
 	 'Megakaryocytes': 'pink'
 }
 fm_colors = ['blue', 'red']
-sc_df = pd.read_csv('/home/tjv32/research/Python Notebooks/data/dash_data/sc_df.csv')
-#sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
+#sc_df = pd.read_csv('/home/tjv32/research/Python Notebooks/data/dash_data/sc_df.csv')
+sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
+
+adata = sc.read_h5ad('data/pbmc.h5ad')
+
 if('sample_num' not in sc_df.columns):
 	sc_df['sample_num'] = [1] * len(sc_df)
 
@@ -59,6 +63,7 @@ sex_filters = [{'label': i, 'value': i} for i in sex_vals]
 clinical_state_filters = [{'label': i, 'value': i} for i in clinical_states]
 placenta_location_filters = [{'label': i, 'value': i} for i in plascenta_locations]
 
+gene_names = [{'label': i, 'value': i} for i in ['Y Chromosome Index', 'PlaSCenta Assignment', 'Freemuxlet Assignment'] + adata.var_names.to_list()]
 
 custom_dict = {
 	'all' : [i for i in list(set(sc_df['sample_num']))],
@@ -79,9 +84,9 @@ current_data_test = {
     }
 figure_sizes = {
 	1: {
-		'fig_width' : 1600,
+		'fig_width' : 1200,
 		'style_width' : '100%',
-		'title_center' : 0.445
+		'title_center' : 0.435
 
 	},
 	2: {

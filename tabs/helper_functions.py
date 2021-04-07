@@ -6,10 +6,11 @@ import pandas as pd
 
 from tabs.default_data import *
 
-def generate_meta_view(view_num, view_total_count, sample_list):
+def generate_meta_view(view_num, view_total_count, sample_list, fm_umap, view_name):
     template = figure_sizes.get(view_total_count).copy()
     template['sample_selection'] = sample_list
-    template['name'] = f'View {view_num + 1}'
+    template['name'] = view_name
+    template['fm_umap'] = fm_umap
 
     return template
 
@@ -44,6 +45,13 @@ def determine_fetal_counts(fetal_df, maternal_df):
     return f_count, 1 - f_count
 
 def generate_view_plot(sc_df, view_filter, view_meta):
+    adj_sc_df = sc_df.copy()
+    if(view_meta['fm_umap'] in ['Y Chromosome Index', 'PlaSCenta Assignment', 'Freemuxlet Assignment']):
+        gene_vals = None
+    else:
+        gene_vals = adata[:, view_meta['fm_umap']].copy().X[:, 0]
+        adj_sc_df['gene_color'] = gene_vals
+
     fig = make_subplots(6, 1,
         specs = [
             [{'rowspan':2}],
@@ -63,7 +71,7 @@ def generate_view_plot(sc_df, view_filter, view_meta):
             'Cell Type breakdown'
         ]
     )
-    s_sc_df = sc_df[sc_df.sample_num.isin(view_meta['sample_selection'])]
+    s_sc_df = adj_sc_df[adj_sc_df.sample_num.isin(view_meta['sample_selection'])]
     for group_count, group in enumerate(cmap_dict.keys()):
         g_df = s_sc_df[s_sc_df.annotated_clusters == group].copy()
 
@@ -76,11 +84,15 @@ def generate_view_plot(sc_df, view_filter, view_meta):
             selection_filter = (g_df.umap_1 > view_filter['umap_filter']['x'][0]) & \
                 (g_df.umap_1 < view_filter['umap_filter']['x'][1]) & \
                 (g_df.umap_2 > view_filter['umap_filter']['y'][0]) & \
-                (g_df.umap_2 < view_filter['umap_filter']['y'][1])
+                (g_df.umap_2 < view_filter['umap_filter']['y'][1])    
 
             select_df, unselect_df = g_df[selection_filter], g_df[~selection_filter]
 
-            fm_filter = select_df['fetal_maternal_origin'] == 'fetal'
+            if(gene_vals is None):
+                fm_filter = select_df['fetal_maternal_origin'] == 'fetal'
+            else:
+                ##CHNAGE HERE WHEN ADDING FREEMUXLET
+                fm_filter = select_df['fetal_maternal_origin'] == 'fetal'
             fetal_df, maternal_df = select_df[fm_filter], select_df[~fm_filter]
 
             f_count, m_count = determine_fetal_counts(fetal_df, maternal_df)
@@ -142,6 +154,11 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                 )
                 fm_filter = r_df['fetal_maternal_origin'] == 'fetal'
                 for fm_r_df, fm_label, fm_color in zip([r_df[fm_filter], r_df[~fm_filter]],[f_count, m_count], ['red', 'blue']):
+                    if(gene_vals is not None):
+                        fm_color = fm_r_df['gene_color'].to_list()
+                        colorscale='sunset'
+                    else:
+                        colorscale=None
                     fig.add_trace(
                         go.Scattergl(
                             x = fm_r_df.umap_1.to_list(),
@@ -151,6 +168,7 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                                 color = fm_color,
                                 size = 4,
                                 opacity=opacity,
+                                colorscale=colorscale,
                             ),
                             name=group,
                             legendgroup = group,

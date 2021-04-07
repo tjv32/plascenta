@@ -50,6 +50,20 @@ for i in range(3):
                 ),
                 html.Br(),
                 html.Label(
+                    children = f'Enter View Name:',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'black',
+                    }
+                ),
+                html.Br(),
+                dcc.Input(
+                    id=f'name_{i + 1}',
+                    type='text',
+                    value=f'View {i+1}'
+                ),
+                html.Br(),
+                html.Label(
                     children = f'Select Fetal Sex:',
                     style={
                         'textAlign': 'center',
@@ -98,6 +112,21 @@ for i in range(3):
                         'textAlign': 'center',
                         'color': 'black',
                     }
+                ),
+                html.Br(),
+                html.Label(
+                    children = f'Seconday UMAP Visualization: ',
+                    id = f'fm_umap_{i+1}',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'black',
+                    }
+                ),
+                dcc.Dropdown(
+                    id= f'fm_umap_dd_{i + 1}',
+                    options=gene_names,
+                    value='PlaSCenta Assignment',
+                    multi=False,
                 ),
             ]
         )
@@ -247,7 +276,7 @@ def update_group_selection(number_groups):
 )
 def update_views(n_clicks, view_1, view_2, view_3, dd_count):
     views = [view_1, view_2, view_3]
-    dd_indices = [4, 7, 10]
+    dd_indices = [5, 8, 11, 14, -1]
     adj_views = []
     for view in views:
         adj_views.append([view[i] for i in dd_indices])
@@ -255,8 +284,8 @@ def update_views(n_clicks, view_1, view_2, view_3, dd_count):
 
     current_views = []
     for i, adj_view in enumerate(adj_views[:dd_count]):
-        samples = determine_filter_samples(group_info, adj_view[0]['props']['value'], adj_view[2]['props']['value'], adj_view[1]['props']['value'])
-        current_views.append(generate_meta_view(i, dd_count, samples)) 
+        samples = determine_filter_samples(group_info, adj_view[1]['props']['value'], adj_view[3]['props']['value'], adj_view[2]['props']['value'])
+        current_views.append(generate_meta_view(i, dd_count, samples, adj_view[-1]['props']['value'], adj_view[0]['props']['value'])) 
     while(len(current_views) < 3):
         current_views.append(None)
 
