@@ -65,7 +65,7 @@ def generate_view_plot(sc_df, view_filter, view_meta):
         subplot_titles = [
             'Cell Type on UMAP',
             '',
-            'Maternal/Fetal Origin on UMAP',
+            f'{view_meta["fm_umap"]} on UMAP',
             '',
             'Maternal/Fetal Origin breakdown',
             'Cell Type breakdown'
@@ -123,6 +123,8 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                         x = r_df.umap_1.to_list(),
                         y = r_df.umap_2.to_list(),
                         mode='markers',
+                        hovertext = [group] * len(r_df),
+                        hoverinfo="text",
                         marker = dict(
                         color = cmap_dict[group],
                         size = 4,
@@ -153,16 +155,20 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                     col=1
                 )
                 fm_filter = r_df['fetal_maternal_origin'] == 'fetal'
-                for fm_r_df, fm_label, fm_color in zip([r_df[fm_filter], r_df[~fm_filter]],[f_count, m_count], ['red', 'blue']):
+                for fm_r_df, fm_label, fm_color, hover in zip([r_df[fm_filter], r_df[~fm_filter]],[f_count, m_count], ['red', 'blue'], ['fetal', 'maternal']):
                     if(gene_vals is not None):
                         fm_color = fm_r_df['gene_color'].to_list()
                         colorscale='sunset'
+                        hovertext = fm_color
                     else:
-                        colorscale=None
+                        colorscale = None
+                        hovertext = [hover] * len(fm_r_df)
                     fig.add_trace(
                         go.Scattergl(
                             x = fm_r_df.umap_1.to_list(),
                             y = fm_r_df.umap_2.to_list(),
+                            hovertext = hovertext,
+                            hoverinfo="text",
                             mode='markers',
                             marker = dict(
                                 color = fm_color,

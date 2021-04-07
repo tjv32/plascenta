@@ -16,7 +16,7 @@ from tabs.default_data import *
 from tabs.helper_functions import *
 
 tab_title = html.H1(
-    children='plaSCenta',
+    children='PlaSCenta',
     style={
         'textAlign': 'center',
         'color': 'black'
