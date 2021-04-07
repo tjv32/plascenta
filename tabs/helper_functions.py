@@ -49,7 +49,7 @@ def generate_view_plot(sc_df, view_filter, view_meta):
     if(view_meta['fm_umap'] in ['Y Chromosome Index', 'PlaSCenta Assignment', 'Freemuxlet Assignment']):
         gene_vals = None
     else:
-        gene_vals = adata[:, view_meta['fm_umap']].copy().X[:, 0]
+        gene_vals = adata[:, view_meta['fm_umap']].copy().to_df()[view_meta['fm_umap']].to_list()
         adj_sc_df['gene_color'] = gene_vals
 
     fig = make_subplots(6, 1,
