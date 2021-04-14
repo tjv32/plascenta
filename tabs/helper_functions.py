@@ -120,10 +120,10 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                             x0 = group,
                             y = fm_df['gene_color'].to_list(),
                             side = side,
-                            name=fm_label,
                             legendgroup = fm_label,
                             scalegroup = fm_label,
                             showlegend = False,
+                            width = 0.0000000000000000000000000000001,
                             visible=view_filter['selection_data'][(group_count + 1) * 2 + group_count * 8 + 1] 
                         ),
                         row=5,
@@ -208,10 +208,12 @@ def generate_view_plot(sc_df, view_filter, view_meta):
             fig['layout'][f'{ax}axis{i}']['zeroline'] = False
             fig['layout'][f'{ax}axis{i}']['showticklabels'] = False
             fig['layout'][f'{ax}axis{i}']['showspikes'] = False
+    if(gene_vals is not None):
+        fig['layout'][f'xaxis4'] = fig['layout'][f'xaxis5']
 
     fig['layout']['title'] = dict(text = view_meta.get('name'), font=dict(size=22))
     fig['layout']['title_x'] = view_meta['title_center']
-    fig.update_layout(violingap=0, violinmode='overlay')
+    #fig.update_layout(violingap=0, violinmode='overlay')
 
     fig.update_layout(
         margin=dict(
