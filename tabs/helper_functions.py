@@ -97,22 +97,38 @@ def generate_view_plot(sc_df, view_filter, view_meta):
 
             f_count, m_count = determine_fetal_counts(fetal_df, maternal_df)
 
-            for fm_label, fm_count, fm_color in zip(['fetal', 'maternal'],[f_count, m_count], ['red', 'blue']):
-                fig.add_trace(
-                    go.Bar(
-                        x = [group],
-                        y = [fm_count],
-                        name=fm_label,
-                        legendgroup = fm_label,
-                        marker = dict(
-                            color = fm_color
+            for fm_label, fm_count, fm_color, fm_df, side in zip(['fetal', 'maternal'],[f_count, m_count], ['red', 'blue'], [fetal_df, maternal_df], ['positive', 'negative']):
+                if(gene_vals is None):
+                    fig.add_trace(
+                        go.Bar(
+                            x = [group],
+                            y = [fm_count],
+                            name=fm_label,
+                            legendgroup = fm_label,
+                            marker = dict(
+                                color = fm_color
+                            ),
+                            showlegend = False,
+                            visible=view_filter['selection_data'][(group_count + 1) * 2 + group_count * 8 + 1] 
                         ),
-                        showlegend = False,
-                        visible=view_filter['selection_data'][(group_count + 1) * 2 + group_count * 8 + 1] 
-                    ),
-                    row=5,
-                    col=1
-                )    
+                        row=5,
+                        col=1
+                    )    
+                else:
+                    fig.add_trace(
+                        go.Violin(
+                            x0 = group,
+                            y = fm_df['gene_color'].to_list(),
+                            side = side,
+                            name=fm_label,
+                            legendgroup = fm_label,
+                            scalegroup = fm_label,
+                            showlegend = False,
+                            visible=view_filter['selection_data'][(group_count + 1) * 2 + group_count * 8 + 1] 
+                        ),
+                        row=5,
+                        col=1
+                    )
 
 
 
@@ -154,8 +170,7 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                     row=6,
                     col=1
                 )
-                fm_filter = r_df['fetal_maternal_origin'] == 'fetal'
-                for fm_r_df, fm_label, fm_color, hover in zip([r_df[fm_filter], r_df[~fm_filter]],[f_count, m_count], ['red', 'blue'], ['fetal', 'maternal']):
+                for fm_r_df, fm_label, fm_color, hover in zip([fetal_df, maternal_df],[f_count, m_count], ['red', 'blue'], ['fetal', 'maternal']):
                     if(gene_vals is not None):
                         fm_color = fm_r_df['gene_color'].to_list()
                         colorscale='sunset'
@@ -196,6 +211,7 @@ def generate_view_plot(sc_df, view_filter, view_meta):
 
     fig['layout']['title'] = dict(text = view_meta.get('name'), font=dict(size=22))
     fig['layout']['title_x'] = view_meta['title_center']
+    fig.update_layout(violingap=0, violinmode='overlay')
 
     fig.update_layout(
         margin=dict(
@@ -205,7 +221,6 @@ def generate_view_plot(sc_df, view_filter, view_meta):
         t=80,
         )
     )
-
     return fig
 
 #obj = generate_view_plot(sc_df, generate_filter_view(), current_data_test['view_1'])
