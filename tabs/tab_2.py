@@ -125,7 +125,7 @@ for i in range(3):
                 dcc.Dropdown(
                     id= f'fm_umap_dd_{i + 1}',
                     options=gene_names,
-                    value='PlaSCenta Assignment',
+                    value=gene_names[4]['value'],
                     multi=False,
                 ),
             ]
