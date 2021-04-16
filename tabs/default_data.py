@@ -30,8 +30,9 @@ if(os.path.exists('/home/thomas')):
 	sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
 	adata = sc.read_h5ad('data/pbmc.h5ad')
 else:
-	sc_df = pd.read_csv('/home/tjv32/research/Python Notebooks/data/dash_data/sc_df.csv')
+	sc_df = pd.read_csv('/home/tjv32/research/Python Notebooks/data/dash_data/temp_df.csv')
 	adata = sc.read_h5ad('/home/tjv32/research/Python Notebooks/data/filtered_together/adata.h5ad')
+	adata = adata[list(sc_df.iloc[:, 0]), :].copy()
 if('sample_num' not in sc_df.columns):
 	sc_df['sample_num'] = [1] * len(sc_df)
 
