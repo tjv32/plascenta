@@ -102,7 +102,9 @@ def generate_view_plot(sc_df, view_filter, view_meta):
             select_df, unselect_df = g_df[selection_filter], g_df[~selection_filter]
 
             if(view_meta['fm_umap'] == 'Freemuxlet Assignment'):
-                fm_filter = select_df['free_assign'] == 'fetal'
+                fm_filter = select_df['freemux_assign'] == 'fetal'
+            elif(view_meta['fm_umap'] == 'Y Chromosome Index'):
+                fm_filter = select_df['y_chromosome_index'] == 'fetal'
             else:
                 fm_filter = select_df['fetal_maternal_origin'] == 'fetal'
 
@@ -110,7 +112,7 @@ def generate_view_plot(sc_df, view_filter, view_meta):
 
             f_count, m_count = determine_fetal_counts(fetal_df, maternal_df)
 
-            for fm_label, fm_count, fm_color, fm_df, side, point_pos in zip(['fetal', 'maternal'],[f_count, m_count], ['red', 'blue'], [fetal_df, maternal_df], ['positive', 'negative'], [1, -1]):
+            for fm_label, fm_count, fm_color, fm_df, side, point_pos in zip(['fetal', 'maternal'],[f_count, m_count], ['red', 'blue'], [fetal_df, maternal_df], ['negative', 'positive'], [-1, 1]):
                 if(gene_vals is None):
                     fig.add_trace(
                         go.Bar(
@@ -137,13 +139,16 @@ def generate_view_plot(sc_df, view_filter, view_meta):
                             legendgroup = fm_label,
                             scalegroup = fm_label,
                             marker = dict(
-                                size = 3
+                                size = 3,
+                                color=fm_color,
                             ),
                             showlegend = False,
                             alignmentgroup = group,
                             pointpos = point_pos,
                             points="all",
-                            visible=view_filter['selection_data'][(group_count + 1) * 2 + group_count * 8 + 1] 
+                            hovertext = [fm_label] * len(fm_df['gene_color']),
+                            #hoverinfo="text",
+                            visible=view_filter['selection_data'][(group_count + 1) * 2 + group_count * 8 + 1]
                         ),
                         row=5,
                         col=1
@@ -271,4 +276,26 @@ def generate_view_plot(sc_df, view_filter, view_meta):
 
 #compare free muxelet plascenta, intersection
 
-['fetal', 'fetal', 'maternal', 'maternal', 'fetal', 'maternal', 'maternal', 'maternal', 'maternal', 'maternal', 'fetal', 'maternal', 'maternal', 'fetal', 'fetal', 'maternal', 'maternal', 'maternal']
+#['fetal', 'fetal', 'maternal', 'maternal', 'fetal', 'maternal', 'maternal', 'maternal', 'maternal', 'maternal', 'fetal', 'maternal', 'maternal', 'fetal', 'fetal', 'maternal', 'maternal', 'maternal']
+#quantify assumptions with basic truth
+
+#3 google sheets
+#first table
+#cell type vs Origin
+
+#cell types vs genes 
+
+#gene with maternal/fetal
+
+
+#call it seed knowledge
+
+#summer plans
+#bioc required
+#physics good
+#SYBB cool 
+#application for committe letter due first week of march
+# need 3 rec leters
+# pre med thing in the fall
+#program on applying to medical school
+#research low on medical school app

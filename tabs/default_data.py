@@ -30,7 +30,7 @@ if(os.path.exists('/home/thomas')):
 	sc_df = pd.read_csv('data/pbmc_adata/clusters.csv')
 	adata = sc.read_h5ad('data/pbmc.h5ad')
 else:
-	sc_df = pd.read_csv('/home/tjv32/research/Python Notebooks/data/dash_data/temp_df.csv')
+	sc_df = pd.read_csv('/home/tjv32/research/Python Notebooks/data/dash_data/sc_df.csv')
 	adata = sc.read_h5ad('/home/tjv32/research/Python Notebooks/data/filtered_together/adata.h5ad')
 	adata = adata[list(sc_df.iloc[:, 0]), :].copy()
 if('sample_num' not in sc_df.columns):
@@ -38,13 +38,11 @@ if('sample_num' not in sc_df.columns):
 
 groups = list(sc_df['annotated_clusters'].unique())
 if(len(groups) > 10):
-	groups = [
-		'T-Cell-Resting', 'T-Cell-Activated', 'NK-cell', 'B-cell',
-		'STB', 'EVT', 'CTB', 'Endometrial',
-		'Macrophage-1', 'Macrophage-2', 'Monocyte',
-		'Decidual', 'Stromal-1', 'Stromal-3', 'Fibroblast',
-		'LED', 'HSC'
-	]
+	groups = ['STB','CTB','npiCTB','EVT',
+		'Stromal-1','Stromal-2','Stromal-3',
+		'Fibroblast','Endometrial','Decidual','LED','HSC',
+		'Monocyte','Macrophage-1','Macrophage-2',
+		'T-Cell-Activated','T-Cell-Resting','NK-cell','B-cell']
 N = len(groups)
 RGB_tuples = get_N_HexCol(N=N)
 cmap_dict = {}
